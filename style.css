@@ -967,20 +967,21 @@ body {
 
   /* ---- INTRO: visual igual ao computador ---- */
   .written-name {
-    font-size: 40px;
+    font-size: 32px;
     white-space: nowrap;
   }
 
   .intro-label {
-    font-size: 10px;
-    letter-spacing: 2px;
+    font-size: 9px;
+    letter-spacing: 1.5px;
   }
 
   .motion-btn {
-    font-size: 0.78rem;
-    letter-spacing: 0.5px;
-    padding: 13px 28px;
+    font-size: 0.72rem;
+    letter-spacing: 0px;
+    padding: 12px 22px;
     white-space: nowrap;
+    gap: 8px;
   }
 
   .motion-dots-loader {
@@ -1021,8 +1022,8 @@ body {
 
   /* Cargo em uma linha so */
   .profile-role {
-    font-size: 0.52rem;
-    letter-spacing: 0.8px;
+    font-size: 0.48rem;
+    letter-spacing: 0.4px;
   }
 
   .profile-name {
