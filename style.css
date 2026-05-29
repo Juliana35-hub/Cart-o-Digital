@@ -1,0 +1,1048 @@
+/* ==========================================================================
+   DESIGN SYSTEM & VARIABLES
+   ========================================================================== */
+:root {
+  /* Typography */
+  --font-headers: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Colors - Mapped directly from Juliana's custom brand palette */
+  --color-bg-dark: 0 0% 7%;               /* #121212 grafite */
+  --color-card-dark: 240 17% 8%;          /* #0f0f18 */
+  --color-purple-primary: 262 51% 64%;    /* Wisteria #9673D2 */
+  --color-purple-bright: 272 61% 88%;     /* Subtle #E2CEF3 */
+  --color-purple-deep: 288 50% 32%;       /* Orchid #6B297C */
+  --color-text-main: 220 15% 100%;        /* White #ffffff */
+  --color-text-muted: 240 10% 71%;        /* Muted gray #a1a1b5 */
+  
+  /* Brand specific colors for custom glows */
+  --color-whatsapp: 142 70% 49%;          /* Green #25D366 */
+  --color-email: 5 81% 56%;               /* Red #EA4335 */
+  --color-instagram: 340 75% 54%;         /* Pink/Magenta #E1306C */
+  --color-linkedin: 201 100% 36%;         /* Blue #0077B5 */
+
+  /* Glassmorphism Styles */
+  --glass-bg: rgba(15, 15, 22, 0.85);
+  --glass-border: hsla(var(--color-purple-primary) / 0.25);
+  --glass-border-bright: hsla(var(--color-purple-bright) / 0.4);
+
+  /* Shadows */
+  --shadow-purple-soft: 0 15px 40px hsla(var(--color-purple-primary) / 0.2);
+  --shadow-purple-intense: 0 0 35px hsla(var(--color-purple-primary) / 0.45);
+  
+  /* Layout constraints */
+  --card-width: 380px;
+  --card-height: 640px;
+}
+
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body {
+  background-color: hsl(var(--color-bg-dark));
+  color: hsl(var(--color-text-main));
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Background Particle Canvas */
+#bgCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Base Utility Classes */
+.hide {
+  display: none !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fade-out {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  pointer-events: none;
+}
+
+/* Standardized JO Embossed Background Pattern */
+.bg-pattern-jo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='60' viewBox='0 0 160 60'%3E%3Ctext x='10' y='42' fill='%23161618' font-family='Arial Black, sans-serif' font-weight='900' font-size='26' letter-spacing='2'%3EJOJOJOJO%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==========================================================================
+   1. INTRO SCREEN (MOTION DESIGN KINETIC TEXT REVEAL)
+   ========================================================================== */
+.intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  /* Fundo grafite sólido harmonizado com o body */
+  background-color: #121212;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+  will-change: opacity, transform;
+}
+
+.intro-content-motion {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+/* Carregador de Três Bolinhas Retas (Luxury Loader) */
+.motion-dots-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  height: 100px;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+  z-index: 2;
+}
+
+.motion-dots-loader.fade-out {
+  opacity: 0;
+  filter: blur(8px);
+}
+
+.loading-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  animation: bounceDot 1.2s infinite ease-in-out;
+  will-change: transform, opacity, box-shadow;
+}
+
+/* Mapeando as três cores exclusivas da nova paleta */
+.dot-1 {
+  background: hsl(var(--color-purple-deep)); /* Orchid #6B297C */
+  box-shadow: 0 0 15px hsl(var(--color-purple-deep));
+  animation-delay: 0s;
+}
+
+.dot-2 {
+  background: hsl(var(--color-purple-primary)); /* Wisteria #9673D2 */
+  box-shadow: 0 0 15px hsl(var(--color-purple-primary));
+  animation-delay: 0.15s;
+}
+
+.dot-3 {
+  background: hsl(var(--color-purple-bright)); /* Subtle #E2CEF3 */
+  box-shadow: 0 0 15px hsl(var(--color-purple-bright));
+  animation-delay: 0.3s;
+}
+
+@keyframes bounceDot {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-16px) scale(1.15); /* Subida orgânica com aumento leve */
+    opacity: 1;
+    filter: brightness(1.2);
+    /* Glow se expande na subida */
+    box-shadow: 0 10px 25px currentColor;
+  }
+}
+
+/* Container do Nome Escrito (Fase 2) */
+.motion-name-container {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  z-index: 2;
+}
+
+.motion-name-container.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* O Nome que se revela */
+.written-name {
+  font-family: var(--font-headers) !important;
+  font-size: 64px; /* Tamanho fixo — igual no celular e no computador */
+  font-weight: 600;
+  text-align: center;
+  background: linear-gradient(135deg, hsl(var(--color-purple-bright)) 0%, hsl(var(--color-purple-primary)) 100%);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  white-space: normal; /* Permite quebra natural no mobile sem encolher */
+  line-height: 1.1;
+  position: relative;
+  clip-path: inset(0 100% 0 0);
+  filter: drop-shadow(0 0 15px rgba(167, 139, 250, 0.2));
+  transition: clip-path 1.6s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: clip-path;
+}
+
+.written-name.write-active {
+  clip-path: inset(0 0 0 0); /* Revelado completamente */
+}
+
+/* Centelha Luminosa (Spark Pen Tip) */
+.writing-spark {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  background: #ffffff;
+  border-radius: 50%;
+  /* Múltiplos halos brilhantes combinando a paleta do cartão */
+  box-shadow: 
+    0 0 10px #ffffff,
+    0 0 20px hsl(var(--color-purple-bright)),
+    0 0 35px hsl(var(--color-purple-primary)),
+    0 0 50px hsl(var(--color-purple-deep));
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.writing-spark.writing {
+  opacity: 1;
+  animation: writeSpark 1.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes writeSpark {
+  0% {
+    left: 0%;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0; /* Dissolve no final do percurso */
+  }
+}
+
+/* Elementos de rodapé (tagline e botão de entrada) */
+.motion-sub-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform;
+}
+
+.motion-sub-wrap.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.intro-label {
+  font-size: 13px; /* Tamanho fixo */
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: hsl(var(--color-purple-bright));
+  font-family: var(--font-mono) !important;
+  text-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
+}
+
+/* Botão Motion Premium */
+.motion-btn {
+  margin-top: 10px;
+  padding: 14px 36px;
+  font-family: var(--font-headers) !important;
+  font-size: 0.95rem; /* Tamanho fixo */
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, hsl(var(--color-purple-deep)), hsl(var(--color-purple-primary)));
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.motion-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.6);
+}
+
+.motion-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.motion-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* --- KEYFRAMES DO MOTION DESIGN --- */
+@keyframes drawTrail {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes revealInitials {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    width: 145px; /* Largura perfeita lado a lado na fonte padrão */
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   2. MAIN CONTENT & CARD VIEWER
+   ========================================================================== */
+.main-content {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  opacity: 0;
+  transform: scale(0.95);
+  animation: contentFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* 3D Perspective Box */
+.card-perspective {
+  perspective: 1500px;
+  width: var(--card-width);
+  height: var(--card-height);
+  position: relative;
+}
+
+.digital-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  /* CSS Variables combined dynamically in JS */
+  transform: perspective(1500px) rotateX(var(--tiltX, 0deg)) rotateY(calc(var(--rotateY, 0deg) + var(--tiltY, 0deg))) scale3d(var(--card-scale, 1), var(--card-scale, 1), var(--card-scale, 1));
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2), box-shadow 0.3s;
+  will-change: transform;
+}
+
+/* Card Faces Base */
+.card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: hsl(var(--color-card-dark));
+  border: 1px solid hsla(var(--color-purple-primary) / 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px hsla(var(--color-purple-deep) / 0.2), 0 0 30px hsla(var(--color-purple-primary) / 0.12);
+  backface-visibility: hidden;
+  overflow: hidden;
+  z-index: 2;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+/* Tactile Grain Overlay */
+.card-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  z-index: 5;
+}
+
+/* 3. O MONOGRAMA CONTÍNUO DE "JO" */
+.bg-monogram {
+  position: absolute;
+  inset: -20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px; /* Espaçamento vertical perfeitamente juntinho, não grudado */
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.monogram-row {
+  font-family: 'Montserrat', 'Arial Black', sans-serif;
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: 3px; /* Espaçamento horizontal ajustado para ficar mais juntinho */
+  color: #101014; /* Tom escuro de baixo relevo super elegante */
+  white-space: nowrap;
+  text-align: center;
+  width: 120%;
+  text-shadow: -1px -1px 1px rgba(0,0,0,0.6), 1px 1px 1px rgba(255,255,255,0.015);
+  opacity: 0.85;
+  line-height: 1;
+}
+
+/* Holographic Shimmer Highlight */
+.card-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.03) 25%, 
+    rgba(167, 139, 250, 0.08) 45%, 
+    rgba(255, 255, 255, 0.12) 50%, 
+    rgba(167, 139, 250, 0.08) 55%, 
+    rgba(255, 255, 255, 0.03) 75%, 
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateY(-100%) rotate(45deg);
+  transition: transform 0.5s;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.digital-card:hover .card-face {
+  border-color: var(--glass-border-bright);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.75), 0 0 50px rgba(124, 58, 237, 0.22);
+}
+
+/* ==========================================================================
+   LADO A: FRENTE
+   ========================================================================== */
+.face-front {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: #0a0a0c !important;
+}
+
+.front-logo-wrap {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.front-logo {
+  position: relative;
+  font-family: var(--font-headers) !important;
+  font-size: 120px !important;
+  font-weight: 800 !important;
+  letter-spacing: -3px !important;
+  z-index: 4;
+  background: linear-gradient(to bottom, #621db5 0%, #7c22cf 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0px 10px 12px rgba(0, 0, 0, 0.8)) !important;
+  user-select: none;
+  animation: none !important;
+  transform: none !important;
+}
+
+/* ==========================================================================
+   LADO B: VERSO
+   ========================================================================== */
+.face-back {
+  transform: rotateY(180deg);
+  padding: 24px 20px;
+}
+
+.back-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Mini Logo Superior */
+.back-header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+}
+
+.back-logo-text {
+  font-family: var(--font-headers);
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, hsl(var(--color-purple-bright)) 0%, hsl(var(--color-purple-primary)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.5));
+  letter-spacing: -0.5px;
+}
+
+/* Container de Foto de Perfil */
+.profile-container {
+  position: relative;
+  width: 135px;
+  height: 135px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.profile-frame {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.profile-frame::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  /* Conic gradient using the exact hex palette: #4f46e5 (deep), #7c3aed (primary), #a78bfa (bright) */
+  background: conic-gradient(from 0deg, hsl(var(--color-purple-deep)), hsl(var(--color-purple-primary)), hsl(var(--color-purple-bright)), hsl(var(--color-purple-deep)));
+  animation: spinRing 6s linear infinite;
+  z-index: 0;
+}
+
+.profile-frame::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  background: conic-gradient(from 180deg, transparent 60%, rgba(124, 58, 237, 0.25) 100%);
+  animation: spinRing 8s linear infinite reverse;
+  z-index: 0;
+}
+
+.photo-glow {
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+  z-index: 0;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, transparent 70%);
+  filter: blur(15px);
+  pointer-events: none;
+}
+
+.profile-photo {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid hsl(var(--color-card-dark)); /* exact same technique: border: 4px solid var(--bg) */
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.35), inset 0 0 25px rgba(124, 58, 237, 0.1);
+  z-index: 1;
+}
+
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 0.5s ease;
+}
+
+.digital-card:hover .profile-photo img {
+  transform: scale(1.1);
+}
+
+/* Detalhes do Perfil */
+.profile-details {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.profile-name {
+  font-family: var(--font-headers);
+  font-size: 1.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  background: linear-gradient(to right, #ffffff 30%, hsl(var(--color-purple-bright)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,0.3));
+}
+
+.profile-role {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: hsl(240 8% 65%); /* Cinza claro suave — hierarquia sem brigar com o nome */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+/* Separador Decorativo Elegante */
+.decorative-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 80%;
+  margin: 6px 0;
+}
+
+.separator-line {
+  height: 1.5px;
+  flex-grow: 1;
+  background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.6), transparent);
+}
+
+.separator-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: hsl(var(--color-purple-bright));
+  box-shadow: 0 0 10px hsl(var(--color-purple-bright));
+}
+
+/* Descrição Curta */
+.profile-description {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: hsl(var(--color-text-muted));
+  text-align: center;
+  padding: 0 15px;
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+
+/* Rodapé Traseiro (Mídias Sociais + QR Code) */
+.back-footer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 15px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+}
+
+/* Grade de Contatos */
+.social-links-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  justify-items: center;
+}
+
+/* Botões Sociais Premium */
+.social-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.social-icon {
+  width: 20px;
+  height: 20px;
+  fill: #fff;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom glows on hover for each brand */
+.btn-whatsapp:hover {
+  background: rgba(37, 211, 102, 0.08);
+  border-color: hsl(var(--color-whatsapp));
+  box-shadow: 0 0 18px rgba(37, 211, 102, 0.4);
+  transform: translateY(-3px);
+}
+.btn-whatsapp:hover .social-icon {
+  fill: hsl(var(--color-whatsapp));
+}
+
+.btn-email:hover {
+  background: rgba(234, 67, 53, 0.08);
+  border-color: hsl(var(--color-email));
+  box-shadow: 0 0 18px rgba(234, 67, 53, 0.45);
+  transform: translateY(-3px);
+}
+.btn-email:hover .social-icon {
+  fill: hsl(var(--color-email));
+}
+
+.btn-instagram:hover {
+  background: rgba(225, 48, 108, 0.08);
+  border-color: hsl(var(--color-instagram));
+  box-shadow: 0 0 18px rgba(225, 48, 108, 0.45);
+  transform: translateY(-3px);
+}
+.btn-instagram:hover .social-icon {
+  fill: hsl(var(--color-instagram));
+}
+
+.btn-linkedin:hover {
+  background: rgba(0, 119, 181, 0.08);
+  border-color: hsl(var(--color-linkedin));
+  box-shadow: 0 0 18px rgba(0, 119, 181, 0.4);
+  transform: translateY(-3px);
+}
+.btn-linkedin:hover .social-icon {
+  fill: hsl(var(--color-linkedin));
+}
+
+/* Moldura QR Code */
+.qrcode-wrapper {
+  justify-self: end;
+  width: 95px;
+  height: 95px;
+  padding: 6px;
+  background: #fff;
+  border-radius: 12px;
+  border: 2px solid rgba(167, 139, 250, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 15px rgba(124, 58, 237, 0.15);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+
+.qrcode-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.qrcode-wrapper:hover {
+  transform: scale(1.08) rotate(2deg);
+  border-color: hsl(var(--color-purple-bright));
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.35);
+}
+
+/* Call to Action Text link */
+.back-cta {
+  width: 100%;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.cta-link {
+  font-family: var(--font-headers);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: hsl(var(--color-purple-bright));
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s;
+}
+
+.cta-arrow {
+  transition: transform 0.3s;
+}
+
+.cta-link:hover {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.8);
+}
+
+.cta-link:hover .cta-arrow {
+  transform: translate(3px, -3px);
+}
+
+/* ==========================================================================
+   4. CONTROLE DESLIZANTE (SWITCH TOGGLE) ESTILO UNIMED
+   ========================================================================== */
+.toggle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  padding: 8px 22px;
+  border-radius: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 15px rgba(124, 58, 237, 0.05);
+}
+
+.toggle-label {
+  font-family: var(--font-headers);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: hsl(var(--color-text-muted));
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-label.active {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.8);
+  transform: scale(1.08);
+}
+
+/* Custom Switch Track */
+.custom-switch {
+  width: 58px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(124, 58, 237, 0.4);
+  border-radius: 30px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.3s, border-color 0.3s;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.custom-switch:hover {
+  border-color: hsl(var(--color-purple-bright));
+}
+
+/* Sliding Pill Handle */
+.switch-handle {
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, hsl(var(--color-purple-bright)) 0%, hsl(var(--color-purple-primary)) 100%);
+  border-radius: 50%;
+  position: absolute;
+  top: 2.5px;
+  left: 3px;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s;
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.6);
+  will-change: transform;
+}
+
+/* Active switch state */
+.custom-switch.active {
+  background: rgba(124, 58, 237, 0.12);
+  border-color: hsl(var(--color-purple-bright));
+}
+
+.custom-switch.active .switch-handle {
+  transform: translateX(29px);
+  box-shadow: 0 0 14px rgba(167, 139, 250, 0.8);
+}
+
+/* ==========================================================================
+   KEYFRAME ANIMATIONS
+   ========================================================================== */
+@keyframes logoPulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 25px rgba(124, 58, 237, 0.5));
+  }
+  100% {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 40px rgba(124, 58, 237, 0.95));
+  }
+}
+
+@keyframes buttonPulse {
+  0% {
+    box-shadow: 0 0 4px rgba(124, 58, 237, 0.4);
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 16px rgba(167, 139, 250, 0.95);
+    transform: scale(1.12);
+  }
+}
+
+@keyframes spinRing {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes introFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contentFadeIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (RESPONSIVENESS)
+   ========================================================================== */
+@media (max-width: 480px) {
+  :root {
+    --card-width: 320px;
+    --card-height: 550px;
+  }
+  
+  .motion-dots-loader {
+    gap: 12px;
+  }
+  .loading-dot {
+    width: 14px;
+    height: 14px;
+  }
+  
+
+  
+  .card-face {
+    padding: 24px 18px;
+    border-radius: 24px;
+  }
+  
+  .front-logo {
+    font-size: 6.5rem;
+  }
+  
+  .profile-container {
+    width: 115px;
+    height: 115px;
+    margin-bottom: 2px;
+  }
+  
+  .profile-photo {
+    width: 85px;
+    height: 85px;
+  }
+  
+  .profile-name {
+    font-size: 1.35rem;
+  }
+  
+  .profile-description {
+    font-size: 0.76rem;
+    padding: 0 5px;
+    margin-bottom: 10px;
+  }
+  
+  .back-footer {
+    gap: 10px;
+  }
+  
+  .social-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .social-icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  .qrcode-wrapper {
+    width: 78px;
+    height: 78px;
+    padding: 5px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-height: 750px) and (min-width: 481px) {
+  :root {
+    --card-height: 560px;
+  }
+  .card-face {
+    padding: 22px 20px;
+  }
+  .profile-container {
+    width: 110px;
+    height: 110px;
+  }
+  .profile-photo {
+    width: 80px;
+    height: 80px;
+  }
+  .profile-description {
+    margin-bottom: 8px;
+  }
+}
